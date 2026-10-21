@@ -2,6 +2,10 @@
 // Frozen public declarations. Arithmetic implementations belong in fixed_inner.rs.
 
 mod fixed_inner;
+#[cfg(feature = "math")]
+mod math_inner;
+#[cfg(feature = "math")]
+pub use math_inner::MathError;
 use fixed_inner::{Bound, Op, Rounding};
 use std::fmt;
 use std::str::FromStr;

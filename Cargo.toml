@@ -1,13 +1,21 @@
 [package]
 name = "pi_fixed_scale_int"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
+description = "Fixed-denominator 64-bit integer arithmetic with decimal conversion and optional serde/fory serialization"
+license = "MIT OR Apache-2.0"
+documentation = "https://docs.rs/pi_fixed_scale_int"
+keywords = ["fixed-point", "decimal", "arithmetic", "serialization"]
+categories = ["mathematics", "data-structures"]
+include = ["src/**", "tests/**", "Cargo.toml", "Cargo.lock"]
 
 [features]
+math = ["dep:astro-float"]
 serde = ["dep:serde"]
 fory = ["dep:fory"]
 
 [dependencies]
+astro-float = { version = "0.9.6", default-features = false, features = ["std"], optional = true }
 serde = { version = "1", features = ["derive"], optional = true }
 fory = { version = "1.7.7", optional = true }
 
