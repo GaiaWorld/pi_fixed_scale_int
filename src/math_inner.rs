@@ -1,5 +1,5 @@
-// 设计：pi-fixed-scale-int；只冻结公开数学接口，算法由受测模型实现。
 use crate::{FixedI64, FixedU64};
+
 
 /// 可选 math 功能中高精度数学运算的错误。普通、严格、快速档的保证各见对应方法。
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -17,8 +17,7 @@ pub enum MathError {
 
 impl std::fmt::Display for MathError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let _ = (self, f);
-        todo!("评测起点：待实现")
+       todo!("实现起点")
     }
 }
 impl std::error::Error for MathError {}
@@ -37,8 +36,7 @@ macro_rules! unary {
         /// 1 raw 保证返回 PrecisionExhausted。后端错误、NaN、未获独立界证明的无穷
         /// 或无效上下界返回 ComputationFailed。
         pub fn $name(self) -> Result<Self, MathError> {
-            let _ = (self,);
-            todo!("评测起点：待实现")
+            todo!("实现起点")
         }
         #[doc = $description]
         /// 计算对应指数或对数，以区间界证明正确舍入结果，恰好半值时远离零。
@@ -51,8 +49,7 @@ macro_rules! unary {
         /// 舍入 raw 返回 PrecisionExhausted。后端错误、NaN、未获独立界证明的无穷
         /// 或无效上下界返回 ComputationFailed。
         pub fn $strict(self) -> Result<Self, MathError> {
-            let _ = (self,);
-            todo!("评测起点：待实现")
+            todo!("实现起点")
         }
     };
 }
@@ -80,8 +77,7 @@ macro_rules! math_methods {
             /// 返回 PrecisionExhausted，包括对数分母区间仍含零的情况。后端错误、NaN、
             /// 未获独立界证明的无穷或无效区间返回 ComputationFailed。
             pub fn log(self, base: Self) -> Result<Self, MathError> {
-                let _ = (self, base);
-                todo!("评测起点：待实现")
+                todo!("实现起点")
             }
             /// 计算底数为正且不等于一的正确舍入对数。
             /// 保留计数类别和分母（数值 = raw / D）；要求启用 math 且 D > 0。
@@ -93,8 +89,7 @@ macro_rules! math_methods {
             /// 返回 PrecisionExhausted，包括对数分母区间仍含零的情况。后端错误、NaN、
             /// 未获独立界证明的无穷或无效区间返回 ComputationFailed。
             pub fn log_strict(self, base: Self) -> Result<Self, MathError> {
-                let _ = (self, base);
-                todo!("评测起点：待实现")
+                todo!("实现起点")
             }
             /// 整数幂，负指数取倒数，定义 0^0 = 1。
             /// 与正确半值远离零舍入结果最多相差 1 raw。接受所有 i32 指数，包括 i32::MIN。
@@ -107,8 +102,7 @@ macro_rules! math_methods {
             /// 包括取倒数前区间出现零端点。后端错误、NaN、未获独立界证明的无穷或无效区间
             /// 返回 ComputationFailed，包括取倒数之前正幂计算已失败的情况。
             pub fn powi(self, n: i32) -> Result<Self, MathError> {
-                let _ = (self, n);
-                todo!("评测起点：待实现")
+                todo!("实现起点")
             }
             /// 正确舍入的整数幂，定义 0^0 = 1。
             /// 负指数取倒数；接受所有 i32 指数，包括 i32::MIN。保留计数类别与分母
@@ -121,8 +115,7 @@ macro_rules! math_methods {
             /// 包括取倒数前区间出现零端点。后端错误、NaN、未获独立界证明的无穷或无效区间
             /// 返回 ComputationFailed，包括取倒数之前正幂计算已失败的情况。
             pub fn powi_strict(self, n: i32) -> Result<Self, MathError> {
-                let _ = (self, n);
-                todo!("评测起点：待实现")
+                todo!("实现起点")
             }
         }
     };
@@ -147,8 +140,7 @@ macro_rules! fast_unary {
         /// 后端错误、NaN 或无独立界支持的无穷返回 ComputationFailed。
         /// 绝不返回 PrecisionExhausted。
         pub fn $name(self) -> Result<Self, MathError> {
-            let _ = (self,);
-            todo!("评测起点：待实现")
+            todo!("实现起点")
         }
     };
 }
@@ -196,8 +188,7 @@ macro_rules! fast_math_methods {
             /// 或近似 ln(base) 为零（即使精确底数合法）返回 ComputationFailed。
             /// 绝不返回 PrecisionExhausted。
             pub fn fast_log(self, base: Self) -> Result<Self, MathError> {
-                let _ = (self, base);
-                todo!("评测起点：待实现")
+                todo!("实现起点")
             }
 
             /// 固定请求精度的整数幂近似，接受所有 i32 指数，包括 i32::MIN。
@@ -215,8 +206,7 @@ macro_rules! fast_math_methods {
             /// 中间幂（包括零）返回 ComputationFailed；不会把无穷的正幂静默取倒数为零。
             /// 绝不返回 PrecisionExhausted。
             pub fn fast_powi(self, n: i32) -> Result<Self, MathError> {
-                let _ = (self, n);
-                todo!("评测起点：待实现")
+                todo!("实现起点")
             }
         }
     };
