@@ -34,7 +34,6 @@ mod fixed_inner;
 mod math_inner;
 #[cfg(feature = "math")]
 pub use math_inner::MathError;
-use fixed_inner::{Bound, Op, Rounding};
 use std::fmt;
 use std::str::FromStr;
 
@@ -50,7 +49,10 @@ pub trait FixedOperand {
 macro_rules! integer_operands {
     ($($ty:ty),* $(,)?) => {$ (
         impl FixedOperand for $ty {
-            fn parts(self) -> (i128, u32) { (self as i128, 1) }
+            fn parts(self) -> (i128, u32) {
+                let _ = self;
+                todo!("评测起点：待实现")
+            }
         }
     )*};
 }
@@ -67,7 +69,8 @@ pub enum ParseFixedError {
 
 impl fmt::Display for ParseFixedError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{self:?}")
+        let _ = (f,);
+        todo!("评测起点：待实现")
     }
 }
 
@@ -123,18 +126,22 @@ macro_rules! fixed_declarations {
         #[derive(Clone, Copy)]
         #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
         #[cfg_attr(feature = "fory", derive(fory::ForyStruct))]
-        pub struct $name<const D: u32> { raw: $ty }
+        pub struct $name<const D: u32> {
+            raw: $ty,
+        }
 
         impl<const D: u32> fmt::Debug for $name<D> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                f.debug_struct(stringify!($name)).field("raw", &self.raw).field("denominator", &D).finish()
+                let _ = (f,);
+                todo!("评测起点：待实现")
             }
         }
 
         impl<const D: u32> fmt::Display for $name<D> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 const { assert!(D > 0, "denominator must be positive") };
-                fixed_inner::display_decimal(self.raw as i128, D, f)
+                let _ = (f,);
+                todo!("评测起点：待实现")
             }
         }
 
@@ -142,30 +149,32 @@ macro_rules! fixed_declarations {
             type Err = ParseFixedError;
             fn from_str(value: &str) -> Result<Self, Self::Err> {
                 const { assert!(D > 0, "denominator must be positive") };
-                let count = fixed_inner::parse_decimal(value, D)?;
-                let raw = <$ty>::try_from(count).map_err(|_| ParseFixedError::Overflow)?;
-                Ok(Self::from_raw(raw))
+                let _ = (value,);
+                todo!("评测起点：待实现")
             }
         }
 
         impl<const D: u32> FixedOperand for $name<D> {
             fn parts(self) -> (i128, u32) {
                 const { assert!(D > 0, "denominator must be positive") };
-                (self.raw as i128, D)
+                let _ = self;
+                todo!("评测起点：待实现")
             }
         }
 
         impl<const D: u32> TryFrom<f64> for $name<D> {
             type Error = ArithmeticError;
             fn try_from(value: f64) -> Result<Self, Self::Error> {
-                Self::try_from_f64(value)
+                let _ = (value,);
+                todo!("评测起点：待实现")
             }
         }
 
         impl<const D: u32> TryFrom<f32> for $name<D> {
             type Error = ArithmeticError;
             fn try_from(value: f32) -> Result<Self, Self::Error> {
-                Self::try_from_f32(value)
+                let _ = (value,);
+                todo!("评测起点：待实现")
             }
         }
 
@@ -174,21 +183,24 @@ macro_rules! fixed_declarations {
             /// 无运行时失败；使用 D=0 会编译失败。不修改输入或外部状态。
             pub fn from_raw(raw: $ty) -> Self {
                 const { assert!(D > 0, "denominator must be positive") };
-                Self { raw }
+                let _ = (raw,);
+                todo!("评测起点：待实现")
             }
 
             /// 读取以 1/D 为单位的 raw 计数，不进行转换或修改。
             /// 无运行时失败；使用 D=0 会编译失败。
             pub fn raw(self) -> $ty {
                 const { assert!(D > 0, "denominator must be positive") };
-                self.raw
+                let _ = (self,);
+                todo!("评测起点：待实现")
             }
 
             /// 将整数转换为 raw = value * D。超出目标计数范围返回 Overflow；
             /// 输入和外部状态保持不变。
             pub fn try_from_integer(value: $ty) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                fixed_inner::$integer::<D>(value).map(Self::from_raw)
+                let _ = (value,);
+                todo!("评测起点：待实现")
             }
 
             /// 将有限 f64 的 value.to_string() 最短往返十进制字符串转换为 1/D 单位的 raw。
@@ -197,10 +209,8 @@ macro_rules! fixed_declarations {
             /// D=0 会编译失败；输入及外部状态保持不变。
             pub fn try_from_f64(value: f64) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                if !value.is_finite() { return Err(ArithmeticError::Overflow); }
-                let count = fixed_inner::parse_decimal(&value.to_string(), D)
-                    .map_err(|_| ArithmeticError::Overflow)?;
-                <$ty>::try_from(count).map(Self::from_raw).map_err(|_| ArithmeticError::Overflow)
+                let _ = (value,);
+                todo!("评测起点：待实现")
             }
 
             /// 将可通过 `Into<i128>` 转换的整数无损缩放到此比例（raw = value * D）。
@@ -208,8 +218,8 @@ macro_rules! fixed_declarations {
             /// 成功或失败均不修改输入和外部状态。
             pub fn try_from_number<I: Into<i128>>(value: I) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                let count = value.into().checked_mul(i128::from(D)).ok_or(ArithmeticError::Overflow)?;
-                <$ty>::try_from(count).map(Self::from_raw).map_err(|_| ArithmeticError::Overflow)
+                let _ = (value,);
+                todo!("评测起点：待实现")
             }
 
             /// 将有限 f32 的 value.to_string() 最短往返十进制字符串转换为 1/D 单位的 raw，
@@ -218,128 +228,151 @@ macro_rules! fixed_declarations {
             /// D=0 会编译失败；输入及外部状态保持不变。
             pub fn try_from_f32(value: f32) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                if !value.is_finite() { return Err(ArithmeticError::Overflow); }
-                let count = fixed_inner::parse_decimal(&value.to_string(), D)
-                    .map_err(|_| ArithmeticError::Overflow)?;
-                <$ty>::try_from(count).map(Self::from_raw).map_err(|_| ArithmeticError::Overflow)
+                let _ = (value,);
+                todo!("评测起点：待实现")
             }
 
             /// 与不同符号类别、不同分母的定点值或原生整数相乘。
             /// 结果保留左操作数类型与分母；raw = lhs_raw * rhs_raw / rhs_denominator，向零截断。
             /// 最终计数越界返回 Overflow；不修改输入或外部状态。
-            pub fn checked_mul_with<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
+            pub fn checked_mul_with<R: FixedOperand>(
+                self,
+                rhs: R,
+            ) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                let (raw, denominator) = rhs.parts();
-                fixed_inner::mixed_arithmetic::<$ty>(self.raw as i128, raw, denominator, Op::Mul, Rounding::Truncate, Bound::Checked, <$ty>::MIN as i128, <$ty>::MAX as u128).map(Self::from_raw)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 除以另一整数类型/比例的定点值或原生整数，保留左操作数类型与分母。
             /// raw = lhs_raw * rhs_denominator / rhs_raw，向零截断。
             /// 零除数返回 DivisionByZero，越界返回 Overflow；输入和外部状态不变。
-            pub fn checked_div_with<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
+            pub fn checked_div_with<R: FixedOperand>(
+                self,
+                rhs: R,
+            ) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                let (raw, denominator) = rhs.parts();
-                fixed_inner::mixed_arithmetic::<$ty>(self.raw as i128, raw, denominator, Op::Div, Rounding::Truncate, Bound::Checked, <$ty>::MIN as i128, <$ty>::MAX as u128).map(Self::from_raw)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相乘后按最近 raw 计数舍入，恰好半值时远离零；保留左操作数类型与分母。
             /// 舍入后越界返回 Overflow；不修改输入或外部状态。
-            pub fn rounded_mul_with<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
+            pub fn rounded_mul_with<R: FixedOperand>(
+                self,
+                rhs: R,
+            ) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                let (raw, denominator) = rhs.parts();
-                fixed_inner::mixed_arithmetic::<$ty>(self.raw as i128, raw, denominator, Op::Mul, Rounding::HalfAway, Bound::Checked, <$ty>::MIN as i128, <$ty>::MAX as u128).map(Self::from_raw)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相除后按最近 raw 计数舍入，恰好半值时远离零；保留左操作数类型与分母。
             /// 零除数返回 DivisionByZero，舍入后越界返回 Overflow；输入和外部状态不变。
-            pub fn rounded_div_with<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
+            pub fn rounded_div_with<R: FixedOperand>(
+                self,
+                rhs: R,
+            ) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                let (raw, denominator) = rhs.parts();
-                fixed_inner::mixed_arithmetic::<$ty>(self.raw as i128, raw, denominator, Op::Div, Rounding::HalfAway, Bound::Checked, <$ty>::MIN as i128, <$ty>::MAX as u128).map(Self::from_raw)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相乘并向零截断，将越界计数钳制到结果类型上下界；保留左操作数比例。
             /// 对内置操作数不返回错误，不修改输入或外部状态。
             pub fn saturating_mul_with<R: FixedOperand>(self, rhs: R) -> Self {
                 const { assert!(D > 0, "denominator must be positive") };
-                let (raw, denominator) = rhs.parts();
-                Self::from_raw(fixed_inner::mixed_arithmetic::<$ty>(self.raw as i128, raw, denominator, Op::Mul, Rounding::Truncate, Bound::Saturate, <$ty>::MIN as i128, <$ty>::MAX as u128).expect("multiplication cannot divide by zero"))
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相除并向零截断，将越界计数钳制到结果类型上下界；保留左操作数比例。
             /// 零除数仍返回 DivisionByZero；输入和外部状态保持不变。
-            pub fn saturating_div_with<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
+            pub fn saturating_div_with<R: FixedOperand>(
+                self,
+                rhs: R,
+            ) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                let (raw, denominator) = rhs.parts();
-                fixed_inner::mixed_arithmetic::<$ty>(self.raw as i128, raw, denominator, Op::Div, Rounding::Truncate, Bound::Saturate, <$ty>::MIN as i128, <$ty>::MAX as u128).map(Self::from_raw)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相加以 1/D 为单位的 raw 计数。越界返回 Overflow；
             /// 成功或失败均不修改任一输入或外部状态。
             pub fn checked_add(self, rhs: Self) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                fixed_inner::$arithmetic::<D>(self.raw, rhs.raw, Op::Add, Rounding::Truncate, Bound::Checked).map(Self::from_raw)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相减以 1/D 为单位的 raw 计数。越界返回 Overflow；
             /// 成功或失败均不修改任一输入或外部状态。
             pub fn checked_sub(self, rhs: Self) -> Result<Self, ArithmeticError> {
                 const { assert!(D > 0, "denominator must be positive") };
-                fixed_inner::$arithmetic::<D>(self.raw, rhs.raw, Op::Sub, Rounding::Truncate, Bound::Checked).map(Self::from_raw)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相乘后在左操作数比例下向零截断。
             /// 最终计数越界返回 Overflow；输入和外部状态保持不变。
             pub fn checked_mul<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
-                self.checked_mul_with(rhs)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相除后在左操作数比例下向零截断。
             /// 零除数返回 DivisionByZero，计数越界返回 Overflow。
             /// 任一错误均不修改输入或外部状态。
             pub fn checked_div<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
-                self.checked_div_with(rhs)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相加 raw 计数，超过 MAX 或低于 MIN 时钳制到边界（u64 的 MIN 为零）。
             /// 不返回错误；输入和外部状态保持不变。
             pub fn saturating_add(self, rhs: Self) -> Self {
                 const { assert!(D > 0, "denominator must be positive") };
-                Self::from_raw(fixed_inner::$arithmetic::<D>(self.raw, rhs.raw, Op::Add, Rounding::Truncate, Bound::Saturate).expect("addition cannot divide by zero"))
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 相减 raw 计数，超过 MAX 或低于 MIN 时钳制到边界（u64 的 MIN 为零）。
             /// 不返回错误；输入和外部状态保持不变。
             pub fn saturating_sub(self, rhs: Self) -> Self {
                 const { assert!(D > 0, "denominator must be positive") };
-                Self::from_raw(fixed_inner::$arithmetic::<D>(self.raw, rhs.raw, Op::Sub, Rounding::Truncate, Bound::Saturate).expect("subtraction cannot divide by zero"))
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 计算 lhs_raw * rhs_raw / rhs_denominator（同分母时为 raw1 * raw2 / D），
             /// 向零截断后将最终计数钳制到 64 位边界。内置操作数下不返回错误，不修改输入。
             pub fn saturating_mul<R: FixedOperand>(self, rhs: R) -> Self {
-                self.saturating_mul_with(rhs)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 计算 lhs_raw * rhs_denominator / rhs_raw（同分母时为 raw1 * D / raw2），
             /// 向零截断后将最终计数钳制到 64 位边界。零除数返回 DivisionByZero；
             /// 成功或失败均不修改输入或外部状态。
             pub fn saturating_div<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
-                self.saturating_div_with(rhs)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 计算 lhs_raw * rhs_raw / rhs_denominator（同分母时为 raw1 * raw2 / D），
             /// 先按半值远离零舍入，再检查 64 位范围；不可表示则返回 Overflow。
             /// 不修改任一输入或外部状态。
             pub fn rounded_mul<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
-                self.rounded_mul_with(rhs)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 计算 lhs_raw * rhs_denominator / rhs_raw（同分母时为 raw1 * D / raw2），
             /// 先按半值远离零舍入，再检查 64 位范围。零除数返回 DivisionByZero，
             /// 越界返回 Overflow；任一失败均不修改输入或外部状态。
             pub fn rounded_div<R: FixedOperand>(self, rhs: R) -> Result<Self, ArithmeticError> {
-                self.rounded_div_with(rhs)
+                let _ = (self, rhs);
+                todo!("评测起点：待实现")
             }
 
             /// 显式换算为 raw * TO / D，并向零截断。
@@ -347,7 +380,8 @@ macro_rules! fixed_declarations {
             /// 不修改源值或外部状态。
             pub fn rescale<const TO: u32>(self) -> Result<$name<TO>, ArithmeticError> {
                 const { assert!(D > 0 && TO > 0, "denominators must be positive") };
-                fixed_inner::$rescale::<D, TO>(self.raw, Rounding::Truncate).map($name::<TO>::from_raw)
+                let _ = (self,);
+                todo!("评测起点：待实现")
             }
 
             /// 显式换算为 raw * TO / D，恰好半值时远离零舍入。
@@ -355,21 +389,24 @@ macro_rules! fixed_declarations {
             /// 不修改源值或外部状态。
             pub fn rescale_rounded<const TO: u32>(self) -> Result<$name<TO>, ArithmeticError> {
                 const { assert!(D > 0 && TO > 0, "denominators must be positive") };
-                fixed_inner::$rescale::<D, TO>(self.raw, Rounding::HalfAway).map($name::<TO>::from_raw)
+                let _ = (self,);
+                todo!("评测起点：待实现")
             }
 
             /// 输出 raw / D 对应的整数，向零截断。
             /// 结果适合相同整数类型，不会运行时失败，也不修改源值。
             pub fn to_integer(self) -> $ty {
                 const { assert!(D > 0, "denominator must be positive") };
-                fixed_inner::$to_integer::<D>(self.raw, Rounding::Truncate)
+                let _ = (self,);
+                todo!("评测起点：待实现")
             }
 
             /// 输出 raw / D 对应的整数，恰好半值时远离零舍入。
             /// 结果适合相同整数类型，不会运行时失败，也不修改源值。
             pub fn to_integer_rounded(self) -> $ty {
                 const { assert!(D > 0, "denominator must be positive") };
-                fixed_inner::$to_integer::<D>(self.raw, Rounding::HalfAway)
+                let _ = (self,);
+                todo!("评测起点：待实现")
             }
         }
 
@@ -378,13 +415,15 @@ macro_rules! fixed_declarations {
             /// 使用 D=0 的比较会编译失败，不修改任一值。
             fn eq(&self, other: &Self) -> bool {
                 const { assert!(D > 0, "denominator must be positive") };
-                self.raw == other.raw
+                let _ = (other,);
+                todo!("评测起点：待实现")
             }
         }
         impl<const D: u32> Eq for $name<D> {}
         impl<const D: u32> PartialOrd for $name<D> {
             fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-                Some(self.cmp(other))
+                let _ = (other,);
+                todo!("评测起点：待实现")
             }
         }
         impl<const D: u32> Ord for $name<D> {
@@ -392,14 +431,29 @@ macro_rules! fixed_declarations {
             /// 使用 D=0 的比较会编译失败，两个输入保持不变。
             fn cmp(&self, other: &Self) -> std::cmp::Ordering {
                 const { assert!(D > 0, "denominator must be positive") };
-                self.raw.cmp(&other.raw)
+                let _ = (other,);
+                todo!("评测起点：待实现")
             }
         }
     };
 }
 
-fixed_declarations!(FixedU64, u64, unsigned_integer, unsigned_arithmetic, unsigned_rescale, unsigned_to_integer);
-fixed_declarations!(FixedI64, i64, signed_integer, signed_arithmetic, signed_rescale, signed_to_integer);
+fixed_declarations!(
+    FixedU64,
+    u64,
+    unsigned_integer,
+    unsigned_arithmetic,
+    unsigned_rescale,
+    unsigned_to_integer
+);
+fixed_declarations!(
+    FixedI64,
+    i64,
+    signed_integer,
+    signed_arithmetic,
+    signed_rescale,
+    signed_to_integer
+);
 
 macro_rules! integer_conversions {
     ($name:ident; $($ty:ty),* $(,)?) => {$ (
@@ -408,8 +462,8 @@ macro_rules! integer_conversions {
         impl<const D: u32> TryFrom<$ty> for $name<D> {
             type Error = ArithmeticError;
             fn try_from(value: $ty) -> Result<Self, Self::Error> {
-                let value = i128::try_from(value).map_err(|_| ArithmeticError::Overflow)?;
-                Self::try_from_number(value)
+                let _ = (value,);
+                todo!("评测起点：待实现")
             }
         }
     )*};

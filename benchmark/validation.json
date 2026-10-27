@@ -1,0 +1,71 @@
+{
+  "toolchain": "rustc/cargo 1.94.1",
+  "target": "x86_64-pc-windows-msvc",
+  "reference": {
+    "command": "cargo test --all-features --no-fail-fast -- --test-threads=2",
+    "passed": 221,
+    "failed": 0,
+    "privateTests": 26,
+    "publicTests": 195
+  },
+  "seed": {
+    "allFeatureCheck": "cargo check --locked --offline --all-features --all-targets",
+    "allFeatureCheckPassed": true,
+    "featureMatrixBuild": {
+      "configurations": 8,
+      "passed": 8
+    },
+    "featureMatrixRuntime": [
+      {
+        "features": "default",
+        "passed": 7,
+        "failed": 117
+      },
+      {
+        "features": "math",
+        "passed": 7,
+        "failed": 184
+      },
+      {
+        "features": "serde",
+        "passed": 7,
+        "failed": 119
+      },
+      {
+        "features": "fory",
+        "passed": 7,
+        "failed": 119
+      },
+      {
+        "features": "math,serde",
+        "passed": 7,
+        "failed": 186
+      },
+      {
+        "features": "math,fory",
+        "passed": 7,
+        "failed": 186
+      },
+      {
+        "features": "serde,fory",
+        "passed": 7,
+        "failed": 121
+      },
+      {
+        "features": "math,serde,fory",
+        "passed": 7,
+        "failed": 188
+      }
+    ],
+    "expectedFailure": "Runtime test failures from todo! placeholders; not compilation or dependency failures",
+    "baselinePassingTests": [
+      "arithmetic_error_variants_are_public_and_distinct",
+      "zero_denominator_public_operations_fail_to_compile",
+      "zero_denominator_whole_integer_input_fails_to_compile",
+      "different_scales_cannot_be_mixed_directly",
+      "zero_source_integer_output_fails_to_compile",
+      "zero_source_rescale_fails_to_compile",
+      "zero_target_denominator_fails_to_compile"
+    ]
+  }
+}

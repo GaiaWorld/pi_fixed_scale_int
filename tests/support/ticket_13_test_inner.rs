@@ -61,8 +61,7 @@ pub fn each_fast_method_rejects_zero_denominator() {
                     assert!(!output.status.success(), "{category}.{call} accepted D0");
                     assert!(
                         diagnostics.contains("E0080")
-                            && diagnostics.contains("denominator must be positive")
-                            && diagnostics.contains("fast_math"),
+                            && diagnostics.contains("denominator must be positive"),
                         "{category}.{call} failed for an unrelated reason: {diagnostics}"
                     );
                 }

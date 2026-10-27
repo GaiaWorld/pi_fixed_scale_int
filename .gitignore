@@ -1,7 +1,8 @@
 /target
 **/*.rs.bk
 .vscode
-Cargo.lock
+# 评测固定依赖解析结果，Cargo.lock 纳入版本控制。
 tags
 /.idea
 /.opencode
+/.benchmark-results

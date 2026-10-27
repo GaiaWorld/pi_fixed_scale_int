@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "state": "declarations-only",
+  "branch": "benchmark/implementation-seed",
+  "toolchain": "1.94.1",
+  "scope": "按冻结设计与公开接口完成整个库的业务实现",
+  "initialSourceSha256": {
+    "src/lib.rs": "5125ed7d70f9b736e9d721004aad3eadd559b9f176615caa9c9ece9627c97bf1",
+    "src/fixed_inner.rs": "391e0a2fb129b57e7bf2dd83f69fc8071bafd3eaffa18f63f9bd00b795cffed0",
+    "src/math_inner.rs": "fc42e65158fe2c44b1a2ab8458928661bac3f2ae4b226fd50a4c9714eb349ba8"
+  },
+  "hashNormalization": "UTF-8; CRLF normalized to LF; BOM preserved",
+  "publicTestTargets": [
+    {
+      "name": "decimal_api",
+      "allFeatureTests": 11
+    },
+    {
+      "name": "math",
+      "allFeatureTests": 5
+    },
+    {
+      "name": "serialization",
+      "allFeatureTests": 3
+    },
+    {
+      "name": "ticket_1_test",
+      "allFeatureTests": 7
+    },
+    {
+      "name": "ticket_10_additional_test",
+      "allFeatureTests": 2
+    },
+    {
+      "name": "ticket_10_test",
+      "allFeatureTests": 12
+    },
+    {
+      "name": "ticket_11_test",
+      "allFeatureTests": 4
+    },
+    {
+      "name": "ticket_12_test",
+      "allFeatureTests": 2
+    },
+    {
+      "name": "ticket_13_test",
+      "allFeatureTests": 14
+    },
+    {
+      "name": "ticket_14_test",
+      "allFeatureTests": 9
+    },
+    {
+      "name": "ticket_2_test",
+      "allFeatureTests": 9
+    },
+    {
+      "name": "ticket_3_test",
+      "allFeatureTests": 12
+    },
+    {
+      "name": "ticket_4_test",
+      "allFeatureTests": 14
+    },
+    {
+      "name": "ticket_5_test",
+      "allFeatureTests": 10
+    },
+    {
+      "name": "ticket_6_test",
+      "allFeatureTests": 11
+    },
+    {
+      "name": "ticket_7_test",
+      "allFeatureTests": 16
+    },
+    {
+      "name": "ticket_8_test",
+      "allFeatureTests": 35
+    },
+    {
+      "name": "ticket_9_additional_test",
+      "allFeatureTests": 3
+    },
+    {
+      "name": "ticket_9_power_edges_test",
+      "allFeatureTests": 3
+    },
+    {
+      "name": "ticket_9_test",
+      "allFeatureTests": 13
+    }
+  ],
+  "allFeaturePublicTestCount": 195,
+  "baselinePassingTests": [
+    "arithmetic_error_variants_are_public_and_distinct",
+    "zero_denominator_public_operations_fail_to_compile",
+    "zero_denominator_whole_integer_input_fails_to_compile",
+    "different_scales_cannot_be_mixed_directly",
+    "zero_source_integer_output_fails_to_compile",
+    "zero_source_rescale_fails_to_compile",
+    "zero_target_denominator_fails_to_compile"
+  ],
+  "privateImplementationTestsExcluded": 26,
+  "hiddenEvaluationProvided": false,
+  "scoringStatus": "weights, budgets and hidden grading must be frozen before ranked runs"
+}
