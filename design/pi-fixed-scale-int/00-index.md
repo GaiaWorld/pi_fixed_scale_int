@@ -19,5 +19,10 @@
 | 01-requirements/needs.md | 需求与验收 | L1 |
 | 01-requirements/flow.md | 流程图 | L1 |
 | 01-requirements/notes.md | 非功能与澄清 | L1 |
+| 05-modules/modules.md | 本次触达的模块边界 | L5 |
+| 05-modules/deps.md | 模块依赖边与依赖图 | L5 |
+| 05-modules/change-points.md | 变更点与影响面 | L5 |
+| 05-modules/decisions.md | 数学依赖选型与可行性 | L5 |
+| 07-design/call-chain.md | 已有切片 1–6 与新增切片 7–10 的调用链/验收 | L7 |
 
-后续分册仅在相应阶段确认后加入。
+本轮为既有设计返工：原审查报告已归档，新 L9 审查待完成。现有生产代码已实现新增行为，切片 7–10 记为“已落地、待设计复核”，并不表示数学全域精度已获审查放行。
